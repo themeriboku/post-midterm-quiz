@@ -2,6 +2,11 @@ import csv, os
 
 __location__ = os.path.realpath(
     os.path.join(os.getcwd(), os.path.dirname(__file__)))
+movies = []
+with open(os.path.join(__location__, "movies.csv"))as f:
+    rows = csv.DictReader(f)
+    for r in rows:
+        movies.append(dict(r))
 
 class DB:
     def __init__(self):
@@ -97,6 +102,63 @@ class Table:
             pivot_table.append([item, aggregate_val_list])
         return pivot_table
 
+    def insert_row(self, dict):
+        '''
+        This method inserts a dictionary, dict, into a Table object, effectively adding a row to the Table.
+        '''
+        dict = {}
+        with open(os.path.join(__location__, "movies.csv")) as f:
+            rows = csv.DictWriter(f)
+            rows.writeheader(dict)
+            rows.writerow(dict)
+            rows.writerows(dict)
+
+
+
+
+    def update_row(self, primary_attribute, primary_attribute_value, update_attribute, update_value):
+        '''
+        This method updates the current value of update_attribute to update_value
+        For example, my_table.update_row('Film', 'A Serious Man', 'Year', '2022') will change the 'Year' attribute for the 'Film'
+        'A Serious Man' from 2009 to 2022
+        '''
+
+        with open(os.path.join(__location__, "movies.csv")) as f:
+            rows = csv.DictWrite(f)
+            rows.writeheader(primary_attribute)
+            rows.writerow(primary_attribute_value)
+            rows.writerows(update_attribute)
+            rows.writerows(update_value)
+
     def __str__(self):
         return self.table_name + ':' + str(self.table)
+
+table1 = Table('movies', movies)
+
+my_db = DB()
+my_db.insert(table1)
+
+table1_filters = my_db.search('movies')
+comedy = table1.filter(lambda x: x['Genre'] == 'Comedy')
+worldwide = comedy.aggregate(lambda x: sum(x)/len(x),'Worldwide Gross')
+print(f"average value of worldwide Gross in comedy is {worldwide}")
+
+drama = table1.filter(lambda x: x['Genre'] == 'Drama')
+score = drama.aggregate(lambda x: min(x), 'Audience score %')
+print(score)
+
+fantasy = table1.filter(lambda x: x['Genre'] == 'Fantasy')
+count = len(fantasy.table)
+print(count)
+
+
+
+
+
+
+
+
+
+
+
 

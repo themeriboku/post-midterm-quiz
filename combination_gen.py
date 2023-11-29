@@ -13,7 +13,7 @@ def gen_comb_list(list_set):
             temp_item = copy.deepcopy(list_item)
             temp_item.append(val)
             start_list.append(temp_item)
-    return start_list
+    return start_listg
 
 # print("Test gen_comb_list")
 # x = [1, 2, 3]
